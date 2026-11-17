@@ -2,7 +2,7 @@
 """Build a WeakAuras import string ("!WA:1!" = AceSerializer + raw deflate + LibDeflate print-encoding).
 
 Usage: python3 tools/build_import.py auras/<name>/aura.py
-The aura.py file must define `AURA` (dict) and may define `CUSTOM_TEXT` etc. already inlined.
+The aura.py file must define `AURA` (dict) or `AURAS` (dict of name -> aura dict, writes import-<name>.txt each); with an extra `GROUP` (parent group dict) it also writes import-group.txt with every AURAS entry as a child and may define `CUSTOM_TEXT` etc. already inlined.
 Writes import.txt next to it.
 """
 import sys, zlib, runpy, re
@@ -56,8 +56,11 @@ def decode_print(s: str) -> bytes:
     return bytes(out)
 
 
-def build(aura: dict) -> str:
+def build(aura: dict, children: list | None = None) -> str:
+    """children: list of aura dicts -> group import (aura is the parent group; the importer links them)."""
     payload = {"m": "d", "d": aura, "v": 1421, "s": "5.19.0"}
+    if children:
+        payload["c"] = children
     raw = b"^1" + ser(payload) + b"^^"
     c = zlib.compressobj(9, zlib.DEFLATED, -15)
     comp = c.compress(raw) + c.flush()
@@ -67,9 +70,15 @@ def build(aura: dict) -> str:
 if __name__ == "__main__":
     src = Path(sys.argv[1])
     ns = runpy.run_path(str(src))
-    s = build(ns["AURA"])
-    # self-check: round trip
-    back = zlib.decompress(decode_print(s[6:]), -15)
-    assert back.startswith(b"^1^T") and back.endswith(b"^t^^")
-    (src.parent / "import.txt").write_text(s + "\n")
-    print(f"wrote {src.parent/'import.txt'} ({len(s)} chars)")
+    # aura.py defines either AURA (-> import.txt) or AURAS = {"name": aura, ...} (-> import-<name>.txt each)
+    targets = {"import.txt": (ns["AURA"], None)} if "AURA" in ns else {f"import-{k}.txt": (v, None) for k, v in ns["AURAS"].items()}
+    # optional GROUP (a parent group dict) + AURAS: one extra import containing the group and all children
+    if "GROUP" in ns and "AURAS" in ns:
+        targets["import-group.txt"] = (ns["GROUP"], list(ns["AURAS"].values()))
+    for fname, (aura, children) in targets.items():
+        s = build(aura, children)
+        # self-check: round trip
+        back = zlib.decompress(decode_print(s[6:]), -15)
+        assert back.startswith(b"^1^T") and back.endswith(b"^t^^")
+        (src.parent / fname).write_text(s + "\n")
+        print(f"wrote {src.parent/fname} ({len(s)} chars)")
