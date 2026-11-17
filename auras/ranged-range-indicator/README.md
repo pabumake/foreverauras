@@ -32,3 +32,4 @@ Regenerate with: `python3 tools/build_import.py auras/ranged-range-indicator/aur
 - 2026-11-08 – initial version
 - 2026-11-08 – distance color bands (30/20/10/5); shows for friendly players too
 - 2026-11-08 – README updated to match current behavior (texture box, exact yards, update driver, load note)
+- 2026-11-17 – fix import error on ForeverAuras 1.4.3 (`Modernize.lua` `actions` nil): `internalVersion` 91 + `actions` table

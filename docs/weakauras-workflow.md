@@ -22,7 +22,6 @@ Syntax-check a trigger (it is a bare anonymous function, so wrap it): `(echo "lo
 - `"internalVersion": 91` (current for ForeverAuras 1.4.3, see `ForeverAuras.lua:8`). Older values run upgrade steps in `Modernize.lua` that crash on missing fields.
 - `"actions": {"init": {}, "start": {}, "finish": {}}`. `Modernize.lua:2471` reads `data.actions` for versions < 88 without a nil check. Import error text: `Modernize.lua:2471: attempt to index field 'actions' (a nil value)`.
 - Check the installed addon's current version before assuming: `grep -n "internalVersion =" <addon>/ForeverAuras.lua`.
-- `ranged-range-indicator/aura.py` still has `internalVersion` 70 and no `actions`: expect the same import error there (not fixed yet).
 - One folder can ship several auras: define `AURAS = {"player": {...}, "target": {...}}` instead of `AURA`; the build writes `import-<key>.txt` for each. Add a parent `GROUP = {...}` dict (copy the one in `universal-cast-bar/aura.py`, taken from a group ForeverAuras exported) and the build also writes `import-group.txt`: payload `d` = group, `c` = list of children; the importer sets `controlledChildren` and each child's `parent` itself (`Transmission.lua` ~699). Generate variants in Python (see `universal-cast-bar/aura.py`, which rewrites a `UNIT` constant in the Lua and the event list per unit).
 - The build script only needs plain dicts/lists/str/num/bool. Lua arrays are 1-indexed lists; integer dict keys (e.g. `triggers[1]`) are fine.
 

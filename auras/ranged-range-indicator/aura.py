@@ -10,7 +10,8 @@ AURA = {
     "id": ID,
     "uid": "FARangedRange1",
     "regionType": "texture",
-    "internalVersion": 70,
+    "internalVersion": 91,  # current ForeverAuras 1.4.3; older values run Modernize steps that need fields (e.g. actions)
+    "actions": {"init": {}, "start": {}, "finish": {}},
     "parent": None,
     "texture": "Interface\\Buttons\\WHITE8X8",
     "desaturate": False,

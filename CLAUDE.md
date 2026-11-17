@@ -19,7 +19,7 @@ WeakAuras for **WoW Forever** (Classic+ on the modern client), one folder per au
 - `docs/warlock-dot-rotation.md` design record + history of failures (the template for rotation/uptime auras)
 
 ## Hard rules (each cost a debugging round)
-1. `aura.py` needs `"internalVersion": 91` and `"actions": {"init": {}, "start": {}, "finish": {}}` or import crashes in `Modernize.lua`. (`ranged-range-indicator` still lacks them.)
+1. `aura.py` needs `"internalVersion": 91` and `"actions": {"init": {}, "start": {}, "finish": {}}` or import crashes in `Modernize.lua`.
 2. Custom code is sandboxed: no `pcall`, no global assignment (`_G[x] = ...`). Name frames via `CreateFrame("Frame", NAME, ...)`, read via `_G[NAME]`.
 3. Never anchor secure frames to the WA region; never Show/Hide/move/resize secure frames (or their parents) in combat; alpha only. Default to display-only auras.
 4. In combat the client hides aura data (`C_Secrets.ShouldAurasBeSecret()`): name/index lookups fail, check `issecretvalue`. Track debuffs by spell ID and/or a local timer from `UNIT_SPELLCAST_SUCCEEDED:player`.
