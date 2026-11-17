@@ -5,6 +5,7 @@ WoW WeakAuras I build, one folder per aura under `auras/`.
 | Aura | What it does |
 |------|--------------|
 | [ranged-range-indicator](auras/ranged-range-indicator/) | Shows distance to target, green/yellow/red for ranged classes |
+| [universal-cast-bar](auras/universal-cast-bar/) | Fancy cast bar for player/target/focus: casts, channels, pushback, interrupts, latency, ticks, GCD |
 | [warlock-dot-rotation](auras/warlock-dot-rotation/) | WoW Forever warlock rotation queue (now + next 2, scrolling) with a strip of running DoTs |
 
 ## Adding a new aura

@@ -5,9 +5,9 @@ WeakAuras for **WoW Forever** (Classic+ on the modern client), one folder per au
 `AGENTS.md` is a symlink to this file. Edit `CLAUDE.md` only.
 
 ## Commands
-- Build one aura: `python3 tools/build_import.py auras/<name>/aura.py` -> writes `auras/<name>/import.txt` (commit it).
+- Build one aura: `python3 tools/build_import.py auras/<name>/aura.py` -> writes `auras/<name>/import.txt` (commit it). If `aura.py` defines `AURAS = {name: dict}` instead of `AURA`, it writes `import-<name>.txt` per entry; add a `GROUP` dict and it also writes `import-group.txt` (one paste imports the group with all children). See `universal-cast-bar`.
 - Syntax check a trigger: `(echo "local f = "; cat auras/<name>/trigger.lua) | luac -p -`
-- Logic test with mock WoW API: `luajit auras/warlock-dot-rotation/test_harness.lua auras/warlock-dot-rotation/trigger.lua`
+- Logic tests with mock WoW API: `luajit auras/<name>/test_harness.lua auras/<name>/trigger.lua` (exists for `warlock-dot-rotation`, `universal-cast-bar`)
 - After editing `trigger.lua` or `aura.py` ALWAYS rebuild `import.txt`, update the aura README changelog.
 
 ## Read first (docs/)
@@ -15,6 +15,7 @@ WeakAuras for **WoW Forever** (Classic+ on the modern client), one folder per au
 - `docs/wow-forever.md` Forever specifics: ranks, hidden aura data in combat, web sources that work/403
 - `docs/secure-frames.md` why click-to-cast and dynamic icons conflict
 - `docs/testing.md` mock harness, in-game debugging, handover checklist
+- `docs/cast-bar-research.md` cast data on Forever, secret-value toolbox (DurationObject, formatter, curve colours); reuse for any timer/bar aura
 - `docs/warlock-dot-rotation.md` design record + history of failures (the template for rotation/uptime auras)
 
 ## Hard rules (each cost a debugging round)

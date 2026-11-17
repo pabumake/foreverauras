@@ -5,7 +5,7 @@
 `python3 tools/build_import.py auras/<name>/aura.py` must succeed.
 
 ## 2. Logic without the game: mock harness
-`auras/warlock-dot-rotation/test_harness.lua` (run with `luajit`, see its header) stubs the WoW API (frames as no-op objects, `C_Spell`, `C_UnitAuras`, `C_Secrets`, `GetTime`, ...), loads the trigger, feeds events and prints the resulting queue. It simulates fully hidden aura data, casts and elapsed time. Use it for any aura whose logic depends on state over time. Copy and adapt per aura (frame names, known spells, IDs).
+`auras/warlock-dot-rotation/test_harness.lua` and `auras/universal-cast-bar/test_harness.lua` (run with `luajit`, see their headers; the cast bar one also mocks frames, DurationObjects, the numeric formatter and secret values) stubs the WoW API (frames as no-op objects, `C_Spell`, `C_UnitAuras`, `C_Secrets`, `GetTime`, ...), loads the trigger, feeds events and prints the resulting queue. It simulates fully hidden aura data, casts and elapsed time. Use it for any aura whose logic depends on state over time. Copy and adapt per aura (frame names, known spells, IDs).
 Rules of thumb for the mock: capitalized method names return no-op functions, lowercase fields return nil (so custom fields like `frame.dbg` behave as in the game).
 What it cannot prove: real API behaviour (what the client returns, secret values, restrictions). That only shows up in game.
 

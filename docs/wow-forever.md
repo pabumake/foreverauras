@@ -8,6 +8,7 @@ WoW: Forever is Blizzard's official Classic+ project: vanilla-based content (lev
 - **Names differ from retail/Classic.** Curse of Agony is **Bane of Agony** here; Agony/Unstable Affliction/Haunt do not exist. Curse of Shadow and Dark Pact are removed. New: Wrack (Affliction talent), Bane of Havoc (Destruction talent). Verify names against the spellbook; English only.
 - **Aura data is hidden ("secret") in combat.** `C_Secrets.ShouldAurasBeSecret()` is true then. While true: scanning by index raises, aura names/IDs are secret values, name lookups find nothing; only `C_UnitAuras.GetUnitAuraBySpellID(unit, id)` can still work (this is what `BuffTrigger2.lua` does, see `SafeForEachAura`). Check with `issecretvalue(v)` before comparing/formatting values. Observed with DoT Ledger's debug: `auras=restricted` right after a cast in combat, `readable` later.
 - **Target debuff timers are therefore unreliable in combat.** The working approach is layered (name scan when readable, ID lookup, local timer from `UNIT_SPELLCAST_SUCCEEDED`), see [warlock-dot-rotation.md](warlock-dot-rotation.md). A local timer cannot see resists/dispels; it is an estimate (DoT Ledger does the same and marks estimates `~`).
+- **Cast data** of other units is secret in and out of combat on this server; own casts are readable. Details, API names and patterns: [cast-bar-research.md](cast-bar-research.md).
 - **Secure frames** (click-to-cast) are restricted in combat as everywhere in WoW: [secure-frames.md](secure-frames.md).
 
 ## Web sources: what worked, what did not
